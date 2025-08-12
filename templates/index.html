@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Sumar con Flask API</title>
+</head>
+<body>
+    <h1>Suma dos números</h1>
+    <form id="sumarForm">
+        <input type="number" id="numA" placeholder="Número A" required />
+        <input type="number" id="numB" placeholder="Número B" required />
+        <button type="submit">Sumar</button>
+    </form>
+    <p>Resultado: <span id="resultado">-</span></p>
+
+    <script>
+        const form = document.getElementById('sumarForm');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const a = document.getElementById('numA').value;
+            const b = document.getElementById('numB').value;
+
+            const response = await fetch('/api/sumar', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({a, b})
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                document.getElementById('resultado').textContent = data.resultado;
+            } else {
+                document.getElementById('resultado').textContent = data.error || 'Error';
+            }
+        });
+    </script>
+</body>
+</html>
